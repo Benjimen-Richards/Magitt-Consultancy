@@ -21,6 +21,19 @@ app.post("/data", (req, res) => {
   userdata.save();
   res.send("updated");
 });
+app.post("/verify", (req, res) => {
+  const data = {
+    number: req.body.number,
+    password: req.body.password,
+  };
+  modaldata.findOne({ number: data.number }).then((r) => {
+    if (r && r.password === data.password) {
+      res.send(true);
+    } else {
+      res.send(false);
+    }
+  });
+});
 app.listen(port, () => {
   console.log(`port running on ${port}`);
 });
