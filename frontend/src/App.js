@@ -1,46 +1,51 @@
-import React from "react";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormControl from "@material-ui/core/FormControl";
-import FormLabel from "@material-ui/core/FormLabel";
-
-export default function RadioButtonsGroup() {
-  const [value, setValue] = React.useState("female");
-
-  const handleChange = (event) => {
-    setValue(event.target.value);
+import React, { useState } from "react";
+import "./App.css";
+import { Button } from "@material-ui/core";
+import TextField from "@material-ui/core/TextField";
+import axios from "axios";
+export default function App() {
+  const [number, setnumber] = useState("");
+  const [password, setpassword] = useState("");
+  const numberhandler = (e) => {
+    setnumber(e.target.value);
   };
-
+  const passwordhandler = (e) => {
+    setpassword(e.target.value);
+  };
+  const submithandler = () => {
+    const data = {
+      number,
+      password,
+    };
+    axios.post("/data", data).then((r) => {
+      if (r.data) {
+        alert("Updated");
+        setnumber("");
+        setpassword("");
+      }
+    });
+  };
   return (
-    <FormControl component="fieldset">
-      <FormLabel component="legend">Gender</FormLabel>
-      <RadioGroup
-        aria-label="gender"
-        name="gender1"
-        value={value}
-        onChange={handleChange}
-      >
-        <FormControlLabel
-          value="female"
-          control={<Radio />}
-          label="Female"
-          style={{
-            display: "",
-            width: "10px",
-            border: "1px solid black",
-            height: "2px",
-          }}
+    <div className="container">
+      <form noValidate autoComplete="off" className="Form_box">
+        <TextField
+          id="standard-basic"
+          label="Enter Your number"
+          type="number"
+          value={number}
+          onChange={numberhandler}
         />
-
-        <FormControlLabel value="other" control={<Radio />} label="Other" />
-        <FormControlLabel
-          value="disabled"
-          disabled
-          control={<Radio />}
-          label="(Disabled option)"
+        <TextField
+          id="standard-basic"
+          label="Enter Your password"
+          type="password"
+          value={password}
+          onChange={passwordhandler}
         />
-      </RadioGroup>
-    </FormControl>
+        <Button variant="contained" color="primary" onClick={submithandler}>
+          Submit Your details
+        </Button>
+      </form>
+    </div>
   );
 }
